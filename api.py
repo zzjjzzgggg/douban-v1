@@ -66,8 +66,10 @@ class DoubanAPI:
 				start+=50
 			except gdata.service.RequestError:
 				print 'Request Error! <recommendations>'
+				break
 			except Exception, e:
 				print e
+				break
 		return rst
 
 	def getContacts(self, uid):
@@ -93,7 +95,7 @@ class DoubanAPI:
 
 def test():
 	api=DoubanAPI()
-	recs=api.getRecs(43793218)
+	recs=api.getRecs(1755725)
 	print len(recs)
 	#for rec in recs: print rec
 	#usrs=api.getContacts(41953424)
