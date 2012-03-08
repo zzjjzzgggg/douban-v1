@@ -62,7 +62,7 @@ class DoubanAPI:
 				for entry in feed.entry:
 					rec=RecEntry(uid, entry.id.text, entry.title.text, entry.published.text, entry.content.text)
 					rst.append(rec)
-				if len(feed.entry)!=50 or start>50*max_pages: break
+				if len(feed.entry)<45 or start>50*max_pages: break
 				start+=50
 			except gdata.service.RequestError:
 				print 'Request Error! <recommendations>'
