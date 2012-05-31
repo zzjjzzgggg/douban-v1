@@ -59,6 +59,7 @@ class MyMonitor(threading.Thread):
 	def run(self):
 		while True:
 			time.sleep(7)
-			for q in self.qus: print q.qsize()
+			dat=[q.qsizs() for q in self.qus]
+			print 'Qsize:', dat
 
 
