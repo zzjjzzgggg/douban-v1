@@ -28,8 +28,11 @@ class TACHarvestor(threading.Thread):
 		self.usrQu=usrQu
 
 	def run(self):
-		dapi=api.DoubanAPI()
+		n=0
 		while True:
+			if n%100==0:
+				dapi=api.DoubanAPI()
+				n+=1
 			uid=self.uidQu.get()
 			self.uidQu.task_done()
 			self.usrQu.put(dapi.getRichUser(uid))
