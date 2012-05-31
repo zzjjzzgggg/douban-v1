@@ -3,6 +3,7 @@
 
 import pymongo
 import time
+import random
 
 db=pymongo.Connection('192.168.4.238').douban
 
@@ -26,9 +27,17 @@ def saveContacts(uid, conts):
 	for usr in conts: 
 		saveUsr(usr)
 		if db.visited.find_one({'_id':usr.id, 'rec':{'$exists':True}}) is None:
-			db.to_visit.insert({'_id':usr.id,'t':int(time.time())})
+			db.to_visit.insert({'_id':usr.id, 't':int(time.time())})
 		uids.append(usr.id)
 	db.visited.update({'_id':uid}, {'$set':{'f':uids}})
+
+def swr():
+	while True:
+		uid=random.randint(1000001, 56830027)
+		item=db.sample.find_one({'_id':uid})
+		if item is None or ('sd' in item and item['sd']==1): continue
+		db.sample.update({'_id':uid}, {'$set':{'sd':1}})
+		return uid
 
 def test():
 	print getUids(2)
