@@ -30,12 +30,11 @@ class TACHarvestor(threading.Thread):
 	def run(self):
 		n=0
 		while True:
-			if n%100==0:
-				dapi=api.DoubanAPI()
-				n+=1
+			if n%100==0: dapi=api.DoubanAPI()
 			uid=self.uidQu.get()
 			self.uidQu.task_done()
 			self.usrQu.put(dapi.getRichUser(uid))
+			n+=1
 
 class Storer(threading.Thread):
 	def __init__(self, qu, fstorer):
