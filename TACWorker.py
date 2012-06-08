@@ -3,6 +3,8 @@
 import threading
 import Queue,time
 import dao,api
+from mysampler import *
+from FileStorer import *
 
 class Producer(threading.Thread):
 	def __init__(self, qu):
@@ -20,6 +22,29 @@ class Producer(threading.Thread):
 			self.qu.put(uid)
 		print 'Producer stopped.'
 
+class ProducerS1(threading.Thread):
+	def __init__(self, qu):
+		threading.Thread.__init__(self)
+		self.daemon=True
+		self.qu=qu
+		self.stop=False
+		self.sampler=MySampler()
+		self.sampler.initS1()
+		self.storer=FileStorer('S1')
+	
+	def stopWorking(self):
+		self.stop=True
+		self.storer.close()
+
+	def run(self):
+		while not self.stop:
+			uids=self.sampler.sampleS1()
+			if uids is None: continue
+			self.storer.savePair(uids)
+			if not dao.isSampled(uids[0]): self.qu.put(uids[0])
+			if not dao.isSampled(uids[1]): self.qu.put(uids[1])
+		print 'Producer stopped.'
+
 class TACHarvestor(threading.Thread):
 	def __init__(self, uidQu, usrQu):
 		threading.Thread.__init__(self)
@@ -34,6 +59,7 @@ class TACHarvestor(threading.Thread):
 			uid=self.uidQu.get()
 			self.uidQu.task_done()
 			self.usrQu.put(dapi.getRichUser(uid))
+			dao.markAsSampled(uid)
 			n+=1
 
 class Storer(threading.Thread):
