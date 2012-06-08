@@ -45,6 +45,29 @@ class ProducerS1(threading.Thread):
 			if not dao.isSampled(uids[1]): self.qu.put(uids[1])
 		print 'Producer stopped.'
 
+class ProducerS2(threading.Thread):
+	def __init__(self, qu):
+		threading.Thread.__init__(self)
+		self.daemon=True
+		self.qu=qu
+		self.stop=False
+		self.sampler=MySampler()
+		self.sampler.initS2()
+		self.storer=FileStorer('S2')
+	
+	def stopWorking(self):
+		self.stop=True
+		self.storer.close()
+
+	def run(self):
+		while not self.stop:
+			uids=self.sampler.sampleS2()
+			if uids is None: continue
+			self.storer.savePair(uids)
+			if not dao.isSampled(uids[0]): self.qu.put(uids[0])
+			if not dao.isSampled(uids[1]): self.qu.put(uids[1])
+		print 'Producer stopped.'
+
 class TACHarvestor(threading.Thread):
 	def __init__(self, uidQu, usrQu):
 		threading.Thread.__init__(self)
