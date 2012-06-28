@@ -38,7 +38,7 @@ class MySampler:
 		while tmp>self.pop[i][1]: i+=1
 		n1=self.pop[i][0]
 		rst=sampleNbrs(n1, 2)
-		return (n1, rst[0]) if rst is not None else None
+		return rst
 
 if __name__=='__main__':
 	sampler=MySampler()
