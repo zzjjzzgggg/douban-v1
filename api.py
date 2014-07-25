@@ -170,14 +170,14 @@ class DoubanAPI:
 
 def test():
 	api=DoubanAPI()
-	#recs=api.getRecs(1755725)
-	#print len(recs)
+	recs=api.getRecs(1755725)
+	print len(recs)
 	#for rec in recs: print rec
 	#usrs=api.getContacts(41953424)
 	#print len(usrs)
 	#tags=api.getTags(1573459)
-	colls=api.getCollections(1573459, 'music')
-	print len(colls)
+	#colls=api.getCollections(1573459, 'music')
+	#print len(colls)
 
 if __name__=='__main__':
 	test()

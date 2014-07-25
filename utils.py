@@ -1,9 +1,7 @@
 #! /usr/bin/env python
 #coding=utf-8
 
-import time
-import os, re
-import codecs
+import re
 
 rex_num=re.compile(r'\d+')
 def getNums(numstr):
